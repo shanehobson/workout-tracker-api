@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const exerciseSchema = new mongoose.Schema({
     date: {
-        type: String,
+        type: Date,
         required: true,
         trim: true
     },
@@ -43,6 +43,14 @@ const exerciseSchema = new mongoose.Schema({
     }
 }, {
     timestamps: true
+})
+
+// Hash the plain text password before saving
+exerciseSchema.pre('save', async function (next) {
+    const exercise = this
+    exercise.date = new Date(exercise.date)
+
+    next()
 })
 
 const Exercise = mongoose.model('Exercise', exerciseSchema)

@@ -44,6 +44,30 @@ router.get('/exercises/:id', auth, async (req, res) => {
     }
 })
 
+router.get('/exercisesbyStartAndEndDate', auth, async (req, res) => {
+    const { startDate, endDate } = req.query;
+
+    console.log(startDate, endDate);
+
+    try {
+        const exercises = await Exercise.find({ 
+            owner: req.user._id,
+            date : { $gte : new Date(startDate), $lte : new Date(endDate) }
+         });
+
+         console.log(exercises);
+
+        if (!exercises) {
+            return res.status(404).send()
+        }
+
+        res.send(exercises)
+    } catch (e) {
+        console.log(e);
+        res.status(500).send()
+    }
+})
+
 router.patch('/exercises/:id', auth, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ['date', 'type', 'name', 'sets', 'reps', 'miles', 'bodyParts']
