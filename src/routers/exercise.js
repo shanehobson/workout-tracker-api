@@ -44,10 +44,8 @@ router.get('/exercises/:id', auth, async (req, res) => {
     }
 })
 
-router.get('/exercisesbyStartAndEndDate', auth, async (req, res) => {
+router.get('/exercisesByDateRange', auth, async (req, res) => {
     const { startDate, endDate } = req.query;
-
-    console.log(startDate, endDate);
 
     try {
         const exercises = await Exercise.find({ 
@@ -55,15 +53,12 @@ router.get('/exercisesbyStartAndEndDate', auth, async (req, res) => {
             date : { $gte : new Date(startDate), $lte : new Date(endDate) }
          });
 
-         console.log(exercises);
-
         if (!exercises) {
             return res.status(404).send()
         }
 
         res.send(exercises)
     } catch (e) {
-        console.log(e);
         res.status(500).send()
     }
 })
