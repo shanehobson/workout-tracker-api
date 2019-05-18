@@ -7,6 +7,7 @@ const Exercise = require('./exercise')
 const userSchema = new mongoose.Schema({
     name: {
         type: String,
+        unique: true,
         required: true,
         trim: true
     },
@@ -69,8 +70,8 @@ userSchema.methods.generateAuthToken = async function () {
     return token
 }
 
-userSchema.statics.findByCredentials = async (email, password) => {
-    const user = await User.findOne({ email })
+userSchema.statics.findByCredentials = async (name, password) => {
+    const user = await User.findOne({ name })
 
     if (!user) {
         throw new Error('Unable to login')
