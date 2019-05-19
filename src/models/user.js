@@ -50,6 +50,12 @@ userSchema.virtual('exercises', {
     foreignField: 'owner'
 })
 
+userSchema.virtual('userData', {
+    ref: 'UserData',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
 userSchema.methods.toJSON = function () {
     const user = this
     const userObject = user.toObject()

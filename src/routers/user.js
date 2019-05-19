@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const UserData = require('../models/userData')
 const auth = require('../middleware/auth')
 const cors = require('cors');
 const router = new express.Router()
@@ -9,7 +10,11 @@ router.post('/users', cors(), async (req, res) => {
     const user = new User(req.body)
 
     try {
-        await user.save()
+        const savedUser = await user.save()
+
+        const userData = new UserData({ owner: savedUser['_id']})
+        await userData.save()
+
         const token = await user.generateAuthToken()
         res.status(201).send({ user, token })
     } catch (e) {

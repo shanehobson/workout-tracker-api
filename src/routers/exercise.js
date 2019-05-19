@@ -1,5 +1,6 @@
 const express = require('express')
 const Exercise = require('../models/exercise')
+const UserData = require('../models/userData')
 const auth = require('../middleware/auth')
 const router = new express.Router()
 
@@ -22,6 +23,17 @@ router.get('/exercises', auth, async (req, res) => {
         const exercises = await req.user.populate('exercises').execPopulate()
         console.log(exercises)
         res.send(req.user.exercises)
+    } catch (e) {
+        console.log(e);
+        res.status(500).send()
+    }
+})
+
+router.get('/userData', auth, async (req, res) => {
+    try {
+        const userData = await req.user.populate('userData').execPopulate()
+        console.log(userData)
+        res.send(req.user.userData)
     } catch (e) {
         console.log(e);
         res.status(500).send()
