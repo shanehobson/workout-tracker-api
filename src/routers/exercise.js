@@ -33,10 +33,34 @@ router.get('/userData', auth, async (req, res) => {
     try {
         const userData = await req.user.populate('userData').execPopulate()
         console.log(userData)
-        res.send(req.user.userData)
+        res.send(req.user.userData[0])
     } catch (e) {
         console.log(e);
         res.status(500).send()
+    }
+})
+
+router.patch('/userData', auth, async (req, res) => {
+    const updates = Object.keys(req.body)
+    const allowedUpdates = ['liftingExercises', 'cardioExercises', 'bodyParts']
+    const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
+
+    if (!isValidOperation) {
+        return res.status(400).send({ error: 'Invalid updates!' })
+    }
+
+    try {
+        const userData = await UserData.findOne({ owner: req.user._id})
+
+        if (!userData) {
+            return res.status(404).send()
+        }
+
+        updates.forEach((update) => userData[update] = req.body[update])
+        await userData.save()
+        res.send(userData)
+    } catch (e) {
+        res.status(400).send(e)
     }
 })
 

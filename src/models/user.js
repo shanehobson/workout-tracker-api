@@ -103,10 +103,11 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
-// Delete user exercises when user is removed
+// Delete user exercises and user data when user is removed
 userSchema.pre('remove', async function (next) {
     const user = this
     await Exercise.deleteMany({ owner: user._id })
+    await UserData.deleteOne({ owner: user._id })
     next()
 })
 
