@@ -42,7 +42,7 @@ router.get('/userData', auth, async (req, res) => {
 
 router.patch('/userData', auth, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ['liftingExercises', 'cardioExercises', 'bodyParts']
+    const allowedUpdates = ['liftingExercises', 'cardioExercises', 'bodyParts', 'bodyPartsMap']
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
