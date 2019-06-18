@@ -1,6 +1,9 @@
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb://127.0.0.1:27017/workout-tracker-api', {
+/* Mongo DB Atlas Connection string */
+const uri = `mongodb+srv://shane:${process.env.MongoDbPassword}@cluster0-gjsun.mongodb.net/workout-tracker-api?retryWrites=true`
+
+mongoose.connect(uri, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false
